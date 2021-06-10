@@ -10,11 +10,11 @@ var _ sdk.Msg = &MsgCreatePost{}
 
 func NewMsgCreatePost(creator string, title string, body string) *MsgCreatePost {
 	return &MsgCreatePost{
-		  Creator: creator,
-		  Title: title,
-		  Body: body,
-	  }
-  }
+		Creator: creator,
+		Title:   title,
+		Body:    body,
+	}
+}
 
 // Route ...
 func (msg MsgCreatePost) Route() string {
@@ -45,7 +45,7 @@ func (msg *MsgCreatePost) GetSignBytes() []byte {
 func (msg *MsgCreatePost) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-  		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-  	}
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
 	return nil
 }

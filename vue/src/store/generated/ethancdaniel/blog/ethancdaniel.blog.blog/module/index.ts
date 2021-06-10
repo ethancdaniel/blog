@@ -4,11 +4,17 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgCreateComment } from "./types/blog/tx";
+import { MsgDeleteComment } from "./types/blog/tx";
 import { MsgCreatePost } from "./types/blog/post";
+import { MsgUpdateComment } from "./types/blog/tx";
 
 
 const types = [
+  ["/ethancdaniel.blog.blog.MsgCreateComment", MsgCreateComment],
+  ["/ethancdaniel.blog.blog.MsgDeleteComment", MsgDeleteComment],
   ["/ethancdaniel.blog.blog.MsgCreatePost", MsgCreatePost],
+  ["/ethancdaniel.blog.blog.MsgUpdateComment", MsgUpdateComment],
   
 ];
 
@@ -36,7 +42,10 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee=defaultFee, memo=null }: SignAndBroadcastOptions) => memo?client.signAndBroadcast(address, msgs, fee,memo):client.signAndBroadcast(address, msgs, fee),
+    msgCreateComment: (data: MsgCreateComment): EncodeObject => ({ typeUrl: "/ethancdaniel.blog.blog.MsgCreateComment", value: data }),
+    msgDeleteComment: (data: MsgDeleteComment): EncodeObject => ({ typeUrl: "/ethancdaniel.blog.blog.MsgDeleteComment", value: data }),
     msgCreatePost: (data: MsgCreatePost): EncodeObject => ({ typeUrl: "/ethancdaniel.blog.blog.MsgCreatePost", value: data }),
+    msgUpdateComment: (data: MsgUpdateComment): EncodeObject => ({ typeUrl: "/ethancdaniel.blog.blog.MsgUpdateComment", value: data }),
     
   };
 };
