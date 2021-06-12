@@ -12,6 +12,7 @@ import (
 	"github.com/ethancdaniel/blog/x/blog/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"log"
 )
 
 func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*types.QueryAllPostResponse, error) {
@@ -31,7 +32,12 @@ func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*typ
 		if err := k.cdc.UnmarshalBinaryBare(value, &post); err != nil {
 			return err
 		}
-		b := postIDStore.Get(GetCommentIDBytes(uint64(0)))
+		postID_uint, int_err := strconv.ParseUint(post.Id, 10, 64)
+		if int_err != nil {
+			log.Fatal(int_err)
+		}
+		b := postIDStore.Get(GetCommentIDBytes(postID_uint))
+
 		x, n := binary.Uvarint(b)
 		if n == len(b) {
 			post.Comments = strconv.FormatUint(x, 10)

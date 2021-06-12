@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethancdaniel/blog/x/blog/types"
 	"strconv"
+	"log"
 )
 
 // GetCommentCount get the total number of comment
@@ -59,11 +60,18 @@ func (k Keeper) AppendComment(
 
 	store = prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentPostIDKey))
 
+	
+
+	postID_uint, err := strconv.ParseUint(comment.PostID, 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	buf := make([]byte, binary.MaxVarintLen64)
 	n := binary.PutUvarint(buf, comment.Id)
 	b := buf[:n]
-	value = b
-	store.Set(GetCommentIDBytes(uint64(0)), value)
+
+	store.Set(GetCommentIDBytes(postID_uint), b)
 	// Update comment count
 	k.SetCommentCount(ctx, count+1)
 
