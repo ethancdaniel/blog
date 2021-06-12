@@ -2,7 +2,13 @@
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "ethancdaniel.blog.blog";
-const baseComment = { creator: "", id: 0, body: "", postID: "" };
+const baseComment = {
+    creator: "",
+    id: 0,
+    body: "",
+    postID: "",
+    time: "",
+};
 export const Comment = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== "") {
@@ -16,6 +22,9 @@ export const Comment = {
         }
         if (message.postID !== "") {
             writer.uint32(34).string(message.postID);
+        }
+        if (message.time !== "") {
+            writer.uint32(42).string(message.time);
         }
         return writer;
     },
@@ -37,6 +46,9 @@ export const Comment = {
                     break;
                 case 4:
                     message.postID = reader.string();
+                    break;
+                case 5:
+                    message.time = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -71,6 +83,12 @@ export const Comment = {
         else {
             message.postID = "";
         }
+        if (object.time !== undefined && object.time !== null) {
+            message.time = String(object.time);
+        }
+        else {
+            message.time = "";
+        }
         return message;
     },
     toJSON(message) {
@@ -79,6 +97,7 @@ export const Comment = {
         message.id !== undefined && (obj.id = message.id);
         message.body !== undefined && (obj.body = message.body);
         message.postID !== undefined && (obj.postID = message.postID);
+        message.time !== undefined && (obj.time = message.time);
         return obj;
     },
     fromPartial(object) {
@@ -106,6 +125,12 @@ export const Comment = {
         }
         else {
             message.postID = "";
+        }
+        if (object.time !== undefined && object.time !== null) {
+            message.time = object.time;
+        }
+        else {
+            message.time = "";
         }
         return message;
     },

@@ -10,4 +10,5 @@ message Comment {
   uint64 id = 2;
   string body = 3; 
   string postID = 4; 
+  string time = 5;
 }

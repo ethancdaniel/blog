@@ -4,6 +4,7 @@ export interface BlogComment {
     id?: string;
     body?: string;
     postID?: string;
+    time?: string;
 }
 export interface BlogMsgCreateCommentResponse {
     /** @format uint64 */

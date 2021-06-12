@@ -9,6 +9,7 @@ export interface MsgCreateComment {
   creator: string;
   body: string;
   postID: string;
+  time: string;
 }
 
 export interface MsgCreateCommentResponse {
@@ -31,7 +32,12 @@ export interface MsgDeleteComment {
 
 export interface MsgDeleteCommentResponse {}
 
-const baseMsgCreateComment: object = { creator: "", body: "", postID: "" };
+const baseMsgCreateComment: object = {
+  creator: "",
+  body: "",
+  postID: "",
+  time: "",
+};
 
 export const MsgCreateComment = {
   encode(message: MsgCreateComment, writer: Writer = Writer.create()): Writer {
@@ -43,6 +49,9 @@ export const MsgCreateComment = {
     }
     if (message.postID !== "") {
       writer.uint32(26).string(message.postID);
+    }
+    if (message.time !== "") {
+      writer.uint32(34).string(message.time);
     }
     return writer;
   },
@@ -62,6 +71,9 @@ export const MsgCreateComment = {
           break;
         case 3:
           message.postID = reader.string();
+          break;
+        case 4:
+          message.time = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -88,6 +100,11 @@ export const MsgCreateComment = {
     } else {
       message.postID = "";
     }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = String(object.time);
+    } else {
+      message.time = "";
+    }
     return message;
   },
 
@@ -96,6 +113,7 @@ export const MsgCreateComment = {
     message.creator !== undefined && (obj.creator = message.creator);
     message.body !== undefined && (obj.body = message.body);
     message.postID !== undefined && (obj.postID = message.postID);
+    message.time !== undefined && (obj.time = message.time);
     return obj;
   },
 
@@ -115,6 +133,11 @@ export const MsgCreateComment = {
       message.postID = object.postID;
     } else {
       message.postID = "";
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = object.time;
+    } else {
+      message.time = "";
     }
     return message;
   },

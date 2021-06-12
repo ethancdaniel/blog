@@ -7,11 +7,12 @@ import (
 
 var _ sdk.Msg = &MsgCreateComment{}
 
-func NewMsgCreateComment(creator string, body string, postID string) *MsgCreateComment {
+func NewMsgCreateComment(creator string, body string, postID string, time string) *MsgCreateComment {
 	return &MsgCreateComment{
 		Creator: creator,
 		Body:    body,
 		PostID:  postID,
+		Time: time,
 	}
 }
 

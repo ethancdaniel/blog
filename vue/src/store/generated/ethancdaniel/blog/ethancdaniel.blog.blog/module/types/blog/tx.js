@@ -2,7 +2,12 @@
 import { Reader, util, configure, Writer } from "protobufjs/minimal";
 import * as Long from "long";
 export const protobufPackage = "ethancdaniel.blog.blog";
-const baseMsgCreateComment = { creator: "", body: "", postID: "" };
+const baseMsgCreateComment = {
+    creator: "",
+    body: "",
+    postID: "",
+    time: "",
+};
 export const MsgCreateComment = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== "") {
@@ -13,6 +18,9 @@ export const MsgCreateComment = {
         }
         if (message.postID !== "") {
             writer.uint32(26).string(message.postID);
+        }
+        if (message.time !== "") {
+            writer.uint32(34).string(message.time);
         }
         return writer;
     },
@@ -31,6 +39,9 @@ export const MsgCreateComment = {
                     break;
                 case 3:
                     message.postID = reader.string();
+                    break;
+                case 4:
+                    message.time = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -59,6 +70,12 @@ export const MsgCreateComment = {
         else {
             message.postID = "";
         }
+        if (object.time !== undefined && object.time !== null) {
+            message.time = String(object.time);
+        }
+        else {
+            message.time = "";
+        }
         return message;
     },
     toJSON(message) {
@@ -66,6 +83,7 @@ export const MsgCreateComment = {
         message.creator !== undefined && (obj.creator = message.creator);
         message.body !== undefined && (obj.body = message.body);
         message.postID !== undefined && (obj.postID = message.postID);
+        message.time !== undefined && (obj.time = message.time);
         return obj;
     },
     fromPartial(object) {
@@ -87,6 +105,12 @@ export const MsgCreateComment = {
         }
         else {
             message.postID = "";
+        }
+        if (object.time !== undefined && object.time !== null) {
+            message.time = object.time;
+        }
+        else {
+            message.time = "";
         }
         return message;
     },

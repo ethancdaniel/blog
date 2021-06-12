@@ -12,19 +12,20 @@ import (
 
 func CmdCreateComment() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-comment [body] [postID]",
+		Use:   "create-comment [body] [postID] [time]",
 		Short: "Creates a new comment",
-		Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsBody := string(args[0])
 			argsPostID := string(args[1])
+			argsTime := string(args[2])
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgCreateComment(clientCtx.GetFromAddress().String(), string(argsBody), string(argsPostID))
+			msg := types.NewMsgCreateComment(clientCtx.GetFromAddress().String(), string(argsBody), string(argsPostID), string(argsTime))
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

@@ -5,6 +5,7 @@ export interface MsgCreateComment {
     creator: string;
     body: string;
     postID: string;
+    time: string;
 }
 export interface MsgCreateCommentResponse {
     id: number;

@@ -17,6 +17,7 @@ func (k msgServer) CreateComment(goCtx context.Context, msg *types.MsgCreateComm
 		msg.Creator,
 		msg.Body,
 		msg.PostID,
+		msg.Time,
 	)
 
 	return &types.MsgCreateCommentResponse{

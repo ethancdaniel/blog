@@ -43,6 +43,7 @@ func (k Keeper) AppendComment(
 	creator string,
 	body string,
 	postID string,
+	time string,
 ) uint64 {
 	// Create the comment
 	count := k.GetCommentCount(ctx)
@@ -51,6 +52,7 @@ func (k Keeper) AppendComment(
 		Id:      count,
 		Body:    body,
 		PostID:  postID,
+		Time: time,
 	}
 
 	// Checks if commenter is author of post, deny comment request if so. Fails silently
@@ -62,7 +64,6 @@ func (k Keeper) AppendComment(
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentKey))
 	value := k.cdc.MustMarshalBinaryBare(&comment)
 	store.Set(GetCommentIDBytes(comment.Id), value)
-
 	store = prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentPostIDKey))
 
 	

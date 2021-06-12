@@ -17,6 +17,7 @@ type createCommentRequest struct {
 	Creator string       `json:"creator"`
 	Body    string       `json:"body"`
 	PostID  string       `json:"postID"`
+	Time string 		 `json:"time"`
 }
 
 func createCommentHandler(clientCtx client.Context) http.HandlerFunc {
@@ -42,10 +43,13 @@ func createCommentHandler(clientCtx client.Context) http.HandlerFunc {
 
 		parsedPostID := req.PostID
 
+		parsedTime := req.Time
+
 		msg := types.NewMsgCreateComment(
 			req.Creator,
 			parsedBody,
 			parsedPostID,
+			parsedTime,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)

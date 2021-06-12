@@ -2,15 +2,15 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgUpdateComment } from "./types/blog/tx";
-import { MsgCreateComment } from "./types/blog/tx";
 import { MsgCreatePost } from "./types/blog/post";
+import { MsgCreateComment } from "./types/blog/tx";
 import { MsgDeleteComment } from "./types/blog/tx";
+import { MsgUpdateComment } from "./types/blog/tx";
 const types = [
-    ["/ethancdaniel.blog.blog.MsgUpdateComment", MsgUpdateComment],
-    ["/ethancdaniel.blog.blog.MsgCreateComment", MsgCreateComment],
     ["/ethancdaniel.blog.blog.MsgCreatePost", MsgCreatePost],
+    ["/ethancdaniel.blog.blog.MsgCreateComment", MsgCreateComment],
     ["/ethancdaniel.blog.blog.MsgDeleteComment", MsgDeleteComment],
+    ["/ethancdaniel.blog.blog.MsgUpdateComment", MsgUpdateComment],
 ];
 const registry = new Registry(types);
 const defaultFee = {
@@ -24,10 +24,10 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee = defaultFee, memo = null }) => memo ? client.signAndBroadcast(address, msgs, fee, memo) : client.signAndBroadcast(address, msgs, fee),
-        msgUpdateComment: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgUpdateComment", value: data }),
-        msgCreateComment: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgCreateComment", value: data }),
         msgCreatePost: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgCreatePost", value: data }),
+        msgCreateComment: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgCreateComment", value: data }),
         msgDeleteComment: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgDeleteComment", value: data }),
+        msgUpdateComment: (data) => ({ typeUrl: "/ethancdaniel.blog.blog.MsgUpdateComment", value: data }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {
