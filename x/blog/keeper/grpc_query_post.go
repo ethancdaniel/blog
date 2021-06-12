@@ -3,8 +3,9 @@ package keeper
 
 import (
 	"context"
-	"encoding/binary"
 	"strconv"
+	"strings"
+	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,7 +13,6 @@ import (
 	"github.com/ethancdaniel/blog/x/blog/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"log"
 )
 
 func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*types.QueryAllPostResponse, error) {
@@ -32,16 +32,14 @@ func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*typ
 		if err := k.cdc.UnmarshalBinaryBare(value, &post); err != nil {
 			return err
 		}
+
 		postID_uint, int_err := strconv.ParseUint(post.Id, 10, 64)
 		if int_err != nil {
-			log.Fatal(int_err)
+			panic(int_err)
 		}
 		b := postIDStore.Get(GetCommentIDBytes(postID_uint))
 
-		x, n := binary.Uvarint(b)
-		if n == len(b) {
-			post.Comments = strconv.FormatUint(x, 10)
-		}
+		post.Comments = formatCommentIDs(b)
 		posts = append(posts, &post)
 		return nil
 	})
@@ -51,6 +49,15 @@ func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*typ
 	}
 
 	return &types.QueryAllPostResponse{Post: posts, Pagination: pageRes}, nil
+}
+
+// Converts byte array to string of comma-separated base10 numbers
+func formatCommentIDs (arr []byte) string {
+	result := fmt.Sprintf("%d", arr)
+	result = result[1:len(result) - 1]
+	result = strings.ReplaceAll(result, " ", ", ")
+
+	return result 
 }
 
 func (k Keeper) Post(c context.Context, req *types.QueryGetPostRequest) (*types.QueryGetPostResponse, error) {
