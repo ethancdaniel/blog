@@ -53,6 +53,12 @@ func (k Keeper) AppendComment(
 		PostID:  postID,
 	}
 
+	// Checks if commenter is author of post, deny comment request if so. Fails silently
+	postOwner := k.GetPostOwner(ctx, postID)
+	if postOwner == creator {
+		return count;
+	}
+
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentKey))
 	value := k.cdc.MustMarshalBinaryBare(&comment)
 	store.Set(GetCommentIDBytes(comment.Id), value)
