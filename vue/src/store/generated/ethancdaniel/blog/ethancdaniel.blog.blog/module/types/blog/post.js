@@ -1,7 +1,13 @@
 /* eslint-disable */
 import { Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "ethancdaniel.blog.blog";
-const basePost = { creator: "", id: "", title: "", body: "" };
+const basePost = {
+    creator: "",
+    id: "",
+    title: "",
+    body: "",
+    comments: "",
+};
 export const Post = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== "") {
@@ -15,6 +21,9 @@ export const Post = {
         }
         if (message.body !== "") {
             writer.uint32(34).string(message.body);
+        }
+        if (message.comments !== "") {
+            writer.uint32(42).string(message.comments);
         }
         return writer;
     },
@@ -36,6 +45,9 @@ export const Post = {
                     break;
                 case 4:
                     message.body = reader.string();
+                    break;
+                case 5:
+                    message.comments = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -70,6 +82,12 @@ export const Post = {
         else {
             message.body = "";
         }
+        if (object.comments !== undefined && object.comments !== null) {
+            message.comments = String(object.comments);
+        }
+        else {
+            message.comments = "";
+        }
         return message;
     },
     toJSON(message) {
@@ -78,6 +96,7 @@ export const Post = {
         message.id !== undefined && (obj.id = message.id);
         message.title !== undefined && (obj.title = message.title);
         message.body !== undefined && (obj.body = message.body);
+        message.comments !== undefined && (obj.comments = message.comments);
         return obj;
     },
     fromPartial(object) {
@@ -105,6 +124,12 @@ export const Post = {
         }
         else {
             message.body = "";
+        }
+        if (object.comments !== undefined && object.comments !== null) {
+            message.comments = object.comments;
+        }
+        else {
+            message.comments = "";
         }
         return message;
     },

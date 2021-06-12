@@ -46,6 +46,7 @@ func (k Keeper) CreatePost(ctx sdk.Context, msg types.MsgCreatePost) {
 		Id:      strconv.FormatInt(count, 10),
 		Title:   msg.Title,
 		Body:    msg.Body,
+		Comments: "",
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PostKey))

@@ -57,6 +57,13 @@ func (k Keeper) AppendComment(
 	value := k.cdc.MustMarshalBinaryBare(&comment)
 	store.Set(GetCommentIDBytes(comment.Id), value)
 
+	store = prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentPostIDKey))
+
+	buf := make([]byte, binary.MaxVarintLen64)
+	n := binary.PutUvarint(buf, comment.Id)
+	b := buf[:n]
+	value = b
+	store.Set(GetCommentIDBytes(uint64(0)), value)
 	// Update comment count
 	k.SetCommentCount(ctx, count+1)
 

@@ -30,4 +30,5 @@ func KeyPrefix(p string) []byte {
 const (
 	CommentKey      = "Comment-value-"
 	CommentCountKey = "Comment-count-"
+	CommentPostIDKey= "Comment-post-id"
 )

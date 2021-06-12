@@ -130,7 +130,7 @@ export class HttpClient {
     }
 }
 /**
- * @title blog/query.proto
+ * @title blog/comment.proto
  * @version version not set
  */
 export class Api extends HttpClient {

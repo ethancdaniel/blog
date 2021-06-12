@@ -3,6 +3,8 @@ package keeper
 
 import (
 	"context"
+	"encoding/binary"
+	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,13 +24,18 @@ func (k Keeper) PostAll(c context.Context, req *types.QueryAllPostRequest) (*typ
 
 	store := ctx.KVStore(k.storeKey)
 	postStore := prefix.NewStore(store, types.KeyPrefix(types.PostKey))
+	postIDStore := prefix.NewStore(store, types.KeyPrefix(types.CommentPostIDKey))
 
 	pageRes, err := query.Paginate(postStore, req.Pagination, func(key []byte, value []byte) error {
 		var post types.Post
 		if err := k.cdc.UnmarshalBinaryBare(value, &post); err != nil {
 			return err
 		}
-
+		b := postIDStore.Get(GetCommentIDBytes(uint64(0)))
+		x, n := binary.Uvarint(b)
+		if n == len(b) {
+			post.Comments = strconv.FormatUint(x, 10)
+		}
 		posts = append(posts, &post)
 		return nil
 	})

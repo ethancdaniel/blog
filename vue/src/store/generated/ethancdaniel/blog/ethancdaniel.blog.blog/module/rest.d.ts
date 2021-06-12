@@ -16,6 +16,7 @@ export interface BlogPost {
     id?: string;
     title?: string;
     body?: string;
+    comments?: string;
 }
 export interface BlogQueryAllCommentResponse {
     Comment?: BlogComment[];
@@ -164,7 +165,7 @@ export declare class HttpClient<SecurityDataType = unknown> {
     request: <T = any, E = any>({ body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams) => Promise<HttpResponse<T, E>>;
 }
 /**
- * @title blog/query.proto
+ * @title blog/comment.proto
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {

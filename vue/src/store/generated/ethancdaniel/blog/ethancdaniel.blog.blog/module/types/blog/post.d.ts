@@ -6,6 +6,7 @@ export interface Post {
     id: string;
     title: string;
     body: string;
+    comments: string;
 }
 export interface MsgCreatePost {
     creator: string;

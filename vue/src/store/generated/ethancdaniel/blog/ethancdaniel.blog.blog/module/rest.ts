@@ -32,6 +32,7 @@ export interface BlogPost {
   id?: string;
   title?: string;
   body?: string;
+  comments?: string;
 }
 
 export interface BlogQueryAllCommentResponse {
@@ -334,7 +335,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title blog/query.proto
+ * @title blog/comment.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
