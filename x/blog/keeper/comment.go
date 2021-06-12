@@ -56,9 +56,10 @@ func (k Keeper) AppendComment(
 		Time: argTime,
 	}
 
-	// Checks if commenter is author of post, deny comment request if so. Fails silently
+	// Check if commenter is author of post, deny comment request if so.
+	// Also check if postOwner exists. 
 	postOwner := k.GetPostOwner(ctx, postID)
-	if postOwner == creator {
+	if postOwner == creator || postOwner == "" {
 		return count;
 	}
 
