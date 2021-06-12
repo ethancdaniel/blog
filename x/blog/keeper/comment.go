@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethancdaniel/blog/x/blog/types"
 	"strconv"
+	"time"
 )
 
 // GetCommentCount get the total number of comment
@@ -43,7 +44,7 @@ func (k Keeper) AppendComment(
 	creator string,
 	body string,
 	postID string,
-	time string,
+	argTime string,
 ) uint64 {
 	// Create the comment
 	count := k.GetCommentCount(ctx)
@@ -52,13 +53,25 @@ func (k Keeper) AppendComment(
 		Id:      count,
 		Body:    body,
 		PostID:  postID,
-		Time: time,
+		Time: argTime,
 	}
 
 	// Checks if commenter is author of post, deny comment request if so. Fails silently
 	postOwner := k.GetPostOwner(ctx, postID)
 	if postOwner == creator {
 		return count;
+	}
+
+	// Time is stored as string. Parse to time.Time object to compare to ctx.BlockTime()
+	const timeFormat = "2006-01-02 15:04:05 -0700"
+	parsedTime, _ := time.Parse(timeFormat, comment.Time)
+	diffDuration := parsedTime.Sub(ctx.BlockTime())
+
+	// Check if parsedTime is outside of interval (ctx.Blocktime +/- 60 seconds). If so, fail silently
+	const acceptableDuration = time.Duration(60) * time.Second
+	if diffDuration > acceptableDuration ||
+	   diffDuration < -acceptableDuration {
+		return count
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CommentKey))
